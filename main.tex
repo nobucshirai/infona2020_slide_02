@@ -1,0 +1,226 @@
+% [Overleaf] https://www.overleaf.com/read/vmkkdjjgvwdx
+% [GitHub] https://github.com/nobucshirai/infona2020_slide_02
+\documentclass[dvipdfmx,aspectratio=169,20pt]{beamer}
+\usepackage{bxdpx-beamer}
+\usepackage{hyperref}
+
+% Beamer theme
+\usetheme{Boadilla}
+
+%%%%% JAPANESE FONT SETTINGS %%%%%
+\usepackage[utf8]{inputenc}
+\usepackage{pxjahyper}
+\renewcommand{\kanjifamilydefault}{\gtdefault} % for Gothic Japanese fonts
+\newcommand{\myfontsetting}[3]{{\fontsize{#1}{#2}\selectfont #3}}
+\usepackage[deluxe,uplatex]{otf} % needed to use super bold Japanese fonts
+\usepackage[unicode,noto-otc]{pxchfon} % needed to use super bold Japanese fonts
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%% SETTINGS FOR MATH SYMBOLS %%%%%
+\usepackage{amsmath,amssymb}
+\usepackage{bm}
+%\usepackage{graphicx}
+\usepackage{latexsym}
+\usefonttheme{professionalfonts} % use Serif fonts for equations
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{fancybox,ascmac}
+\usepackage{url}
+\usepackage[many]{tcolorbox}
+
+%%%%% ALGORITHM SETTING %%%%%
+\usepackage{algorithm}
+\usepackage[noend]{algorithmic}
+\algsetup{linenosize=\color{fg!50}\fontsize{8pt}{8pt}\selectfont}
+\renewcommand\algorithmicdo{\bfseries :}
+\renewcommand\algorithmicthen{\bfseries :}
+\renewcommand\algorithmicrequire{\textbf{Input:}}
+\renewcommand\algorithmicensure{\textbf{Output:}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\definecolor{myblue1}{RGB}{45,130,200}
+\definecolor{myblue2}{RGB}{26,89,142}
+\setbeamertemplate{navigation symbols}{}
+\setbeamercolor*{structure}{fg=myblue1,bg=blue}
+\setbeamercolor{block title}{fg=myblue1!50!black}
+\setbeamercolor*{block title example}{fg=white,bg=myblue2}
+\setbeamercolor*{palette primary}{use=structure,fg=white,bg=structure.fg}
+\setbeamercolor*{palette secondary}{use=structure,fg=white,bg=structure.fg!75!black}
+\setbeamercolor*{palette tertiary}{use=structure,fg=white,bg=structure.fg!50!black}
+\setbeamercolor*{palette quaternary}{fg=black,bg=myblue1}
+
+\setbeamerfont{alerted text}{series=\bfseries}
+\setbeamerfont{section in toc}{series=\mdseries}
+\setbeamerfont{frametitle}{size=\Large,series=\bfseries}
+\setbeamerfont{title}{size=\LARGE,series=\bfseries}
+\setbeamerfont{date}{size=\small}
+
+\setbeamertemplate{block title}[shadow=false]
+\setbeamertemplate{blocks}[rounded][shadow=false]
+
+%%%%% BEAMER FOOTLINE SETTINGS %%%%%%
+\setbeamertemplate{footline}[frame number]{}
+\setbeamerfont{footline}{size=\bf\footnotesize\small}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%% BEAMER ITEM SETTINGS %%%%%
+\setbeamertemplate{itemize item}[circle]
+\setbeamertemplate{itemize subitem}[triangle]
+\setbeamertemplate{enumerate item}[circle]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{[問題] I-B}
+%%%%% START_TAG B %%%%%
+%\noindent{\bf I-B.}
+有効数字10進3桁で表された数値 $a=6.52$, $b=6.57$ に対して $\frac{a+b}{2}$ と $a+\frac{b-a}{2}$ を計算せよ。ただし加減乗除の際は得られた数値の有効数字10進4桁以降を切り捨てて計算せよ。
+%%%%% END_TAG B %%%%%
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{[略解] I-B}
+\vspace{-1cm}
+\begin{eqnarray*}
+    \frac{a+b}{2}
+    &=&\frac{6.52+6.57}{2}=\frac{13.0}{2}=6.50
+\end{eqnarray*}
+\begin{eqnarray*}
+    a+\frac{b-a}{2}
+    &=&6.52+\frac{0.05}{2}\\
+    &=&6.52+0.025=6.54
+\end{eqnarray*}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%タイトルページ
+
+\title{有限回の呪縛}
+\titlegraphic{\vspace{-7mm}\flushright\includegraphics[width=1.8cm,height=1.8cm]{hattari_kun_good_org.eps}}
+
+\setbeamertemplate{title page}{%
+    \begin{flushright}
+        \usebeamercolor[fg]{titlegraphic}\inserttitlegraphic
+    \end{flushright}
+    \vspace{-0.6cm}
+    \hspace{1.5cm}{\selectfont\usebeamerfont{subtitle} \usebeamercolor[fg]{subtitle} [\href{https://youtu.be/sWtpojOnymI}{数値解析 第2回}] \par}
+    \vspace{0.5cm}
+    %\vspace{2.5em}
+    {\centering\usebeamerfont{title} \usebeamercolor[fg]{title} \inserttitle \par}
+    \vspace{0.5cm}
+    \begin{center}
+        終わらない計算を始めないために
+    \end{center}
+}
+
+\date[\todey]{}
+
+\frame{\titlepage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{有限回縛りにつきまとう誤差}
+無限回の試行を仮定しているアルゴリズムを有限回で止めてしまうと{\bf 打ち切り誤差}が生じる
+\vspace{0.5cm}
+\begin{block}{{\bf 打ち切り誤差} {\small (Truncation error)}}
+    ある繰り返し処理を途中で打ち切ることによって生じる誤差
+\end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{打ち切り誤差を飼いならす}
+% 有限回縛りの元で望みの精度の近似解を得るにはどうすれば良いか？
+数値解析が提供してくれるもの
+\vspace{0.25cm}
+
+\begin{itemize}
+    \setlength{\itemsep}{0.25cm}
+    \item 解の精度を保証する方法
+    \begin{itemize}
+        \item  何回処理すれば十分な精度の近似解が得られるかが予めわかる
+    \end{itemize}
+    \item 近似解への収束の速さを測る方法
+    \begin{itemize}
+        \item どの手法を使えばより収束が速いかが予めわかる
+    \end{itemize}
+\end{itemize}
+% [副題] 終わらない計算を始めないために
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{[問題] I\hspace{-.01em}I-A}
+%%%%% START_TAG A %%%%%
+%\noindent{\bf [I\hspace{-.01em}I. 有限回の呪縛]}%RETURN
+
+%\noindent{\bf I\hspace{-.01em}I-A.}
+指数関数 $e^x$ を    $x=0$ でテイラー展開して得られた9次の多項式を $p_9(x)$ と置く。
+$x\in [-1,1]$ の範囲のすべての $x$ に対して
+\begin{equation*}
+    |e^x - p_9(x)|\le 10^{-6}
+\end{equation*}
+となることを示せ。
+%%%%% END_TAG A %%%%%
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{[略解] I\hspace{-.01em}I-A}
+%\vspace{-0.5cm}
+{\bf テイラーの定理}より $e^x$ は $p_9(x)$ と{\bf ラグランジュの剰余項} $R_9(x)$ を用いて $e^x = p_9(x)+R_9(x)$ と表される。
+\vspace{0.5cm}
+
+ここで $R_9(x)=\frac{1}{10!}x^{10}e^{c_x}$ $(c_x\in [-1,1])$ である。
+\vspace{0.5cm}
+
+$|R_9(x)|\le 10^{-6}$ より不等式が示された。
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{[解説] 有限回の呪縛}
+\begin{itemize}
+    \setlength{\itemsep}{0.5cm}
+    \item テイラー展開に現れる項を有限項までしか足せない
+    \begin{itemize}
+        \item {\bf 打ち切り誤差}が生じてしまう
+    \end{itemize}
+    \item 
+    %途中で処理をあきらめるにしても
+    何項まで足せば十分か知りたい
+    \begin{itemize}
+        \item 問題毎に異なる精度目標に対してその精度を実現するための指標があると便利
+        \item {\bf テイラーの定理}が使える
+    \end{itemize}
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{{\large [用語解説]}}
+\begin{block}{{\bf テイラーの定理} {\small (Taylor's Theorem)}}
+$f(x)$ は $f(x)$ の$n$ 次までのテイラー多項式 $p_n(x)$ と剰余項 $R_n(x)$ を用いて
+$f(x)=p_n(x)+R_n(x)$ と表せる。
+\end{block}
+\begin{itemize}
+    %\setlength{\itemsep}{0.5cm}
+    \item 剰余項には複数の形がある
+    \begin{itemize}
+        \item 打ち切り誤差を調べるには{\bf ラグランジュの剰余項}が便利。誤差の上限が予め計算できる。
+    \end{itemize}
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{[問題] I\hspace{-.01em}I-B}
+%%%%% PASTE_START_TAG B %%%%%
+%\noindent{\bf I\hspace{-.01em}I-B.}
+$\sqrt{x+1}$ を $x=0$ でテイラー展開して得られた2次の多項式を $p_2(x)$ と置く。
+$x\in [0,1]$ の範囲のすべての $x$ に対して
+\begin{equation*}
+    |\sqrt{x+1} - p_2(x)|\le \frac{1}{16}
+\end{equation*}
+となることを示せ。
+%%%%% PASTE_END_TAG B %%%%%
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
